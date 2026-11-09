@@ -9,7 +9,7 @@ See [`RECIPE.md`](RECIPE.md) for the full layout specification, required mods, b
 ## Requirements
 
 - Herdr App.
-- `git` and `sh` on the machine running the spaces; the layout uses them to inspect projects and worktrees.
+- `git`, `sh`, and `find` on the machine running the spaces; the layout uses them to inspect projects, worktrees, and Markdown files.
 - **Optional GitHub panel:** the [`gh` CLI](https://cli.github.com/) installed and authenticated (`gh auth login`), plus an active space whose Git remote points to GitHub. The rest of the layout works without it.
 - **macOS notifications:** Agent-needs-attention and PR-check success alerts use `osascript` and therefore work only on macOS. The “Open on GitHub” button invokes macOS’s `open` command; adapt it on other operating systems.
 
@@ -19,7 +19,7 @@ The layout pins Dracula Classic: background `#282A36`, foreground `#F8F8F2`, sel
 
 ## Included mods
 
-The layout directly uses `t3-chrome` (brand/footer), `t3-agents`, `my-spaces`, `t3-tabs`, `t3-pane`, `t3-menu`, and `t3-new-menu`. `t3-home` and `t3-picker` are opened through the tab bar's Home/Go to flows. Tab-close confirmation is owned by `t3-tabs`. The Changes panel uses `my-changes-toggle` and Herdr's built-in `changes` mod. The optional GitHub panel uses both `my-github-toggle` and `my-github`.
+The layout directly uses `t3-chrome` (brand/footer), `t3-agents`, `my-spaces`, `t3-tabs`, `t3-pane`, `t3-menu`, `t3-new-menu`, and `my-markdown`. `t3-home` and `t3-picker` are opened through the tab bar's Home/Go to flows. Tab-close confirmation is owned by `t3-tabs`. The Markdown button lists `.md` files in the active project and opens them in an in-layout `TextView.markdown` viewer. The Changes panel uses `my-changes-toggle` and Herdr's built-in `changes` mod. The optional GitHub panel uses both `my-github-toggle` and `my-github`.
 
 The former shared chrome icons are replaced with layout-authored SVGs stored in the mods that use them; `workspace-chrome` is no longer bundled just for shared assets.
 

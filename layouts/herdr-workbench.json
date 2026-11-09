@@ -106,6 +106,13 @@
               "window_drag": true
             },
             {
+              "id": "markdown-toggle",
+              "type": "block",
+              "content": { "mod": "my-markdown" },
+              "size": { "px": 112 },
+              "window_drag": true
+            },
+            {
               "id": "tabs-end",
               "type": "block",
               "content": {
