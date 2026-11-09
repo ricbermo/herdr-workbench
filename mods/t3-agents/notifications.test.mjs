@@ -9,9 +9,9 @@ const calls = [];
 const context = {
   View: class {},
   spaces: () => [],
-  exec: async (command, args) => { calls.push([command, args]); return { code: 0, stdout: "", stderr: "" }; },
+  exec: async (command, args) => { calls.push([command, args]); return { code: 0, stderr: "" }; },
   localStorage: { setItem() {} },
-  console,
+  console: { log() {} },
 };
 vm.runInNewContext(source, context);
 
@@ -29,3 +29,14 @@ track.call(state, [agent], 3);
 agent.status = "blocked";
 track.call(state, [agent], 4);
 assert.equal(calls.length, 2, "a new blocked transition alerts again");
+
+agent.status = "working";
+track.call(state, [agent], 5);
+agent.status = "done";
+track.call(state, [agent], 6);
+assert.equal(calls.length, 3, "finishing after work alerts once");
+assert.equal(calls[2][1][1], 'display notification "Agent needs \\"help\\" terminó su tarea." with title "Herdr"');
+track.call(state, [agent], 7);
+assert.equal(calls.length, 3, "a done agent does not repeat its alert");
+track.call(state, [{ address: "agent-2", status: "done", name: "Already finished" }], 8);
+assert.equal(calls.length, 3, "an agent first seen already done does not trigger a stale alert");

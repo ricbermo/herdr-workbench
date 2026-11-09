@@ -74,7 +74,9 @@ export default class Agents extends View {
     for (const a of list) {
       const s = a.status === "done" ? "idle" : a.status;
       const previous = this.changed[a.address]?.s;
-      if (s === "blocked" && previous !== "blocked") notifyUser(`${a.name || a.program?.name || "Un agente"} necesita tu atención.`);
+      const name = a.name || a.program?.name || "Un agente";
+      if (s === "blocked" && previous !== "blocked") notifyUser(`${name} necesita tu atención.`);
+      if (a.status === "done" && (previous === "working" || previous === "blocked")) notifyUser(`${name} terminó su tarea.`);
       if (previous === s) continue;
       this.changed[a.address] = { s, at: changedAt.get(a.tab) ?? now };
       dirty = true;
