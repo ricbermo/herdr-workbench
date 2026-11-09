@@ -225,6 +225,7 @@
     }
   ],
   "background": "canvas",
+  "theme": "dracula",
   "terminal_padding": [
     8,
     0

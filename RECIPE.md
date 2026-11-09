@@ -1,5 +1,5 @@
 # Herdr Workbench
-A dark, terminal-first workspace with agent activity and project spaces on the left, tabs and panel controls above the terminal, and an optional GitHub issues/PR panel. The layout inherits the user's theme and fonts. ![Herdr Workbench](preview.png)
+A dark, terminal-first workspace with agent activity and project spaces on the left, tabs and panel controls above the terminal, and an optional GitHub issues/PR panel. It uses Dracula Classic colors and inherits the user's font settings; the theme picker can still override the layout's theme. ![Herdr Workbench](preview.png)
 
 ## What you see
 - **Left sidebar (256px; min 208, max 480; not resizable):** 40px brand header; flexible agent and spaces lists (each min 90px); 44px footer. Agent entries group into Needs you, Done, Working, and Idle. Spaces use equal profile-aware lists. The sidebar uses the theme's `chrome` color.
@@ -14,7 +14,7 @@ A dark, terminal-first workspace with agent activity and project spaces on the l
 - **Issues & PRs** toggles the GitHub panel. It finds the active project's GitHub remote, fetches open issues/PRs, shows PR checks separately from mergeability, and opens selected items in a browser. Successful PR checks trigger a macOS notification; polling is every five minutes.
 
 ## Built from
-Use `layouts/herdr-workbench.json`. Its root is a row: a 256px `sidebar` column (`t3-chrome`, `t3-agents`, `my-spaces` with `newMenu: t3-new-menu`, and `t3-chrome` footer) beside `work`. `work` contains the top bar (`t3-tabs`, `my-github-toggle`, `my-changes-toggle`, and `t3-tabs` with `part: end`), then the active tab and a hidden 400px panel. The panel is a stack of Herdr's `changes` mod and `my-github`; the toggle buttons select a view and show or hide the shared panel. An 8px inset and hidden `workspace-status` finish the work column. The active-tab block uses `t3-pane` for pane headers. `t3-menu` is the layout's terminal menu; `t3-actions` supplies close-confirmation dialogs.
+Use `layouts/herdr-workbench.json` with `theme: "dracula"`; install `themes/dracula.json` as `~/.config/herdr-app/themes/dracula.json`. Its root is a row: a 256px `sidebar` column (`t3-chrome`, `t3-agents`, `my-spaces` with `newMenu: t3-new-menu`, and `t3-chrome` footer) beside `work`. `work` contains the top bar (`t3-tabs`, `my-github-toggle`, `my-changes-toggle`, and `t3-tabs` with `part: end`), then the active tab and a hidden 400px panel. The panel is a stack of Herdr's `changes` mod and `my-github`; the toggle buttons select a view and show or hide the shared panel. An 8px inset and hidden `workspace-status` finish the work column. The active-tab block uses `t3-pane` for pane headers. `t3-menu` is the layout's terminal menu; `t3-actions` supplies close-confirmation dialogs.
 
 Bundle every directory under `mods/`: `my-spaces`, `my-github`, `my-github-toggle`, `my-changes-toggle`, `t3-actions`, `t3-agents`, `t3-chrome`, `t3-home`, `t3-menu`, `t3-new-menu`, `t3-pane`, `t3-picker`, `t3-tabs`, `workspace-chrome`, and `workspace-status`. The T3 mods provide the branded sidebar, agent list, tab bar, pane controls, Home/Go to views, new/context menus, and shared icons; the `my-*` mods add profiles and the two panel toggles/GitHub view. They use Herdr's `spaces`, `panes`, `agents`, `machines`, `shared`/`setShared`, `theme`, `props`, `hc`, `exec`, `openOverlay`, and `run` APIs, including `space.*`, `tab.*`, `pane.*`, `layout.toggle`, `layout.select`, `layout.show`, `layout.hide`, and `agent.focus` commands.
 
@@ -23,6 +23,6 @@ Bundle every directory under `mods/`: `my-spaces`, `my-github`, `my-github-toggl
 
 ## Done when
 - `herdr-app check <each mods/<name> folder>` passes for every bundled mod.
-- Install the layout and mods, then `layout.switch {name: "herdr-workbench"}`; the sidebar, tabs, panel toggles, and pane header render.
+- Install `themes/dracula.json`, the layout, and mods, then `layout.switch {name: "herdr-workbench"}`; the Dracula palette, sidebar, tabs, panel toggles, and pane header render.
 - Toggle Changes in a Git repository and verify the changed-file list/diff appear; toggle GitHub in a space with an authenticated GitHub remote and verify both lists load, PR details show Checks and Mergeability separately, and each button selects its panel view.
 - Create two profiles and verify a new space appears only in the active profile; move it to confirm the destination changes.
