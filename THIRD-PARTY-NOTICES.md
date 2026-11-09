@@ -1,8 +1,10 @@
 # Third-party notices
 
-This repository is distributed under the Apache License 2.0; see [`LICENSE`](LICENSE). The license permits free use, redistribution, and modification subject to its terms.
+This repository is distributed under the Apache License 2.0; see [`LICENSE`](LICENSE). It permits use, redistribution, and modification subject to its terms.
 
-The `t3-actions`, `t3-agents`, `t3-chrome`, `t3-home`, `t3-menu`, `t3-new-menu`, `t3-pane`, `t3-picker`, and `t3-tabs` mods are adapted from [JinJieBeWater/herdr-t3](https://github.com/JinJieBeWater/herdr-t3), Copyright JinJieBeWater, Apache-2.0. `my-spaces` is also adapted from that project's `t3-spaces`. These files have been adapted for Herdr Workbench; the upstream layout and mod metadata retain their source names. The T3 project in turn credits Herdr App's shipped mods; their source is included under the same license. See the full license text in `LICENSE`.
+The layout is based on [JinJieBeWater/herdr-t3](https://github.com/JinJieBeWater/herdr-t3), version 0.1.13. `my-spaces` is based on that project's `t3-spaces` mod, version 0.1.13. These are code/layout relationships, not merely visual inspiration.
+
+The bundled T3 mods also carry source metadata in their `mod.json` files. In particular, `t3-agents`, `t3-chrome`, `t3-menu`, `t3-new-menu`, `t3-pane`, `t3-picker`, and `t3-tabs` identify Herdr App's `agents`, `workspace-chrome`, `menu`, `new-menu`, `pane`, `picker`, and `tabs` mods as their respective origins. Herdr T3's README credits these upstream mods and states that its project is Apache-2.0 licensed, like Herdr App. `t3-actions` and `t3-home` are included from the Herdr T3 distribution as well. The package metadata retains these source names and versions where provided.
 
 The bundled SVG icons include Lucide artwork, Copyright Lucide Contributors, licensed under the ISC License:
 
