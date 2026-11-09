@@ -99,17 +99,10 @@
               "window_drag": true
             },
             {
-              "id": "actions",
+              "id": "changes-toggle",
               "type": "block",
-              "content": {
-                "mod": "t3-actions",
-                "props": {
-                  "block": "actions"
-                }
-              },
-              "size": {
-                "px": 108
-              },
+              "content": { "mod": "my-changes-toggle" },
+              "size": { "px": 100 },
               "window_drag": true
             },
             {
@@ -168,13 +161,23 @@
               }
             },
             {
-              "id": "github",
-              "type": "block",
-              "hidden": true,
+              "id": "panel",
+              "type": "column",
+              "children": [
+                {
+                  "id": "panel-body",
+                  "type": "stack",
+                  "children": [
+                    { "id": "changes", "type": "block", "content": { "mod": "changes" } },
+                    { "id": "github", "type": "block", "content": { "mod": "my-github" } }
+                  ],
+                  "active": "changes"
+                }
+              ],
               "size": { "px": 400 },
               "min": 300,
               "max": 650,
-              "content": { "mod": "my-github" }
+              "hidden": true
             }
           ],
           "padding": [

@@ -1,6 +1,6 @@
 # Herdr Workbench
 
-A terminal-first Herdr layout with profile-aware spaces, agent activity, quick actions, and an optional GitHub issues/PR panel.
+A terminal-first Herdr layout with profile-aware spaces, agent activity, a Changes panel, and an optional GitHub issues/PR panel.
 
 ![Herdr Workbench](preview.png)
 
@@ -15,7 +15,7 @@ See [`RECIPE.md`](RECIPE.md) for the full layout specification, required mods, b
 
 ## Included mods
 
-The layout directly uses `t3-chrome` (brand/footer), `t3-agents`, `my-spaces`, `t3-tabs`, `t3-actions`, `t3-pane`, `t3-menu`, and `t3-new-menu`. `t3-home` and `t3-picker` are opened through the tab bar's Home/Go to flows. The optional GitHub panel uses both `my-github-toggle` and `my-github`.
+The layout directly uses `t3-chrome` (brand/footer), `t3-agents`, `my-spaces`, `t3-tabs`, `t3-pane`, `t3-menu`, and `t3-new-menu`. `t3-home` and `t3-picker` are opened through the tab bar's Home/Go to flows; `t3-actions` provides close-confirmation dialogs. The Changes panel uses `my-changes-toggle` and Herdr's built-in `changes` mod. The optional GitHub panel uses both `my-github-toggle` and `my-github`.
 
 `workspace-chrome` is bundled for SVG assets referenced by the mods; its `main.js` is not loaded by this layout. `workspace-status` is referenced only by a hidden layout block and has no other callers, so it can be removed if you don't plan to show that status bar.
 
