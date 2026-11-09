@@ -77,7 +77,7 @@ function items(p, git) {
 
 function menuIcon(command) {
   const name = command.endsWith(".close") ? "x" : command.endsWith(".rename") ? "square-pen" : command.endsWith(".new") ? "plus" : command === "worktree" ? "git-branch" : command === "profile-move" ? "layers" : command === "app.help" ? "terminal" : command === "app.theme" ? "settings" : command === "pane.split" ? "panel-right" : command === "pane.zoom" ? "square" : "terminal";
-  return `mods/workspace-chrome/${name}.svg`;
+  return `mods/t3-menu/icons/${name}.svg`;
 }
 
 // The key bound to a command, for the hint on the right.

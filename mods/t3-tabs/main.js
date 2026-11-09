@@ -1,12 +1,12 @@
 import { View, div, svg, image } from "gpui-kit";
-import { h_flex, Popup } from "gpui-base";
+import { h_flex, v_flex, Popup } from "gpui-base";
 import { spaces, panes, agents, terminals, machines, run, openOverlay, closeOverlay, focused, hc, notify, theme, window, layout, settings, props, shared, setShared, nextCommand, home } from "herdr";
 import { modStatus, namer, programOf } from "./name.js";
 import { descendants, notNews, ownStatus, stillSettled, subAgents, treeStatus } from "./tree.js";
 import { tip, glow } from "./tip.js";
 import { detailsFor, detailsAt, detailsWatch } from "./details.js";
 import { focusAgent, focusPane } from "./zoom.js";
-import { stopsInit, stopsEnd, stop, focusRoot, within } from "./focus.js";
+import { stopsInit, stopsEnd, stop, focusRoot, onStop, within } from "./focus.js";
 
 // Home: one place to land, a space of its own on this computer, known by its id so whatever someone arranges there is theirs.
 // The layout's lists leave it out and the keys that walk spaces go around it, so it takes no number. This mod answers for it
@@ -94,7 +94,7 @@ function awake(st, under) {
 
 // "Needs you", drawn as the agents list and pane headers draw it.
 const blockedMark = (t) => div().size(14).flex_none().rounded(4).bg(t.blocked + "26").text_size(11).font_bold().text_color(t.blocked).flex().items_center().justify_center().child("!");
-const mark = (t, s) => s === "working" ? svg("mods/workspace-chrome/spinner.svg").size(12).flex_none().text_color(t.working).spin(900)
+const mark = (t, s) => s === "working" ? svg("mods/t3-tabs/icons/spinner.svg").size(12).flex_none().text_color(t.working).spin(900)
   : s === "blocked" ? blockedMark(t)
   : div().size(6).flex_none().rounded_full().bg(t.done);
 
@@ -142,6 +142,30 @@ async function atPrompt(terminal) {
   } catch { return false; }
 }
 
+// Close confirmation is rendered by this mod as an overlay.
+const dialog = (t) => v_flex().id("tabs-confirm").size_full().relative().rounded(16).border(1).border_color(t.border).bg(t.popover).shadow_2xl().text_size(14).line_height("20px");
+const dialogButton = (view, t, id, text, el, action) => stop(view, t, id, el.id(id).h(32).px(11).flex_none().items_center().rounded(8).border_1().font_medium().cursor_pointer().hover(s => s.opacity(0.88)).role("button").accessibility_label(text).on_click(action).child(text), 8);
+const luminance = (c) => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16) / 255).map(v => v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4).reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
+const contrast = (a, b) => { const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); };
+const onRed = t => contrast(t.ansi1, "#ffffff") >= contrast(t.ansi1, t.background) ? "#ffffff" : t.background;
+function confirmView(view) {
+  const t = theme(), p = props() ?? {}, done = () => closeOverlay(p.overlay);
+  const yes = () => { done(); run(p.command.name, p.command.args ?? {}); };
+  return focusRoot(view, dialog(t).track_focus(view.ask)
+    .on_key_down((e, cx) => {
+      if (e.key === "enter") { if (onStop(view)) return; yes(); }
+      else if (e.key === "escape") done();
+      else return;
+      cx.stop_propagation();
+    })
+    .child(v_flex().p(24).gap(8).min_h(0)
+      .child(div().text_size(20).line_height("27.5px").font_semibold().text_color(t.foreground).child(p.title ?? "Are you sure?"))
+      .child(div().id("confirm-detail").max_h(384).overflow_y_scrollbar().text_color(t.muted).child(p.detail ?? "")))
+    .child(h_flex().mt_auto().px(24).py(16).gap(8).items_center().justify_end().rounded_b(15).border_t(1).border_color(t.border).bg(t.foreground + "06")
+      .child(dialogButton(view, t, "confirm-no", "Cancel", h_flex().border_color(t.input).bg(t.raised).text_color(t.foreground), done))
+      .child(dialogButton(view, t, "confirm-yes", "Confirm", h_flex().border_color(t.ansi1).bg(t.ansi1).text_color(onRed(t)), yes))));
+}
+
 export default class Tabs extends View {
   init(_props, cx) {
     this.pressed = null;
@@ -150,6 +174,12 @@ export default class Tabs extends View {
     this.nameW = {};
     this.trail = {};
     this.owed = new Map();
+    if (props()?.actions === "confirm") {
+      this.ask = cx.focus_handle();
+      this.ask.focus();
+      stopsInit(this, cx, "modal");
+      return;
+    }
     if (props()?.part !== "measure") stopsInit(this, cx);
     // Only the tab strip's copy answers every person's way to close: the layout's other parts would each open a dialog.
     if (!props()?.part) cx.spawn(async (cx) => {
@@ -194,8 +224,7 @@ export default class Tabs extends View {
     const [title, detail] = names.length === 1
       ? [`Close terminal "${names[0]}"?`, "This stops the running process and clears its history."]
       : [`Close ${names.length} terminals?`, `This stops their running processes and clears their histories: ${names.map(n => `"${n}"`).join(", ")}.`];
-    // t3-actions draws T3's alert dialog: the shipped confirm mod's measures are its own.
-    this.asking = openOverlay({ mod: "t3-actions", kind: "dialog", frame: "none", width: 512, props: { actions: "confirm", title, detail: detail + more, command: { name: command } } });
+    this.asking = openOverlay({ mod: "t3-tabs", kind: "dialog", frame: "none", width: 512, props: { actions: "confirm", title, detail: detail + more, command: { name: command } } });
   }
 
   // Ending a program asks first; empty panes have none to lose, and Herdr still asks if it's the space's last tab.
@@ -498,6 +527,7 @@ export default class Tabs extends View {
   }
 
   render() {
+    if (props()?.actions === "confirm") return confirmView(this);
     // The work column's width, in a strip the bar's controls can't change: measured in the bar, their collapsing would undo itself.
     // on_size_change reports zoomed pixels. Past T3's 768 for the same controls: here they share the row with the tabs.
     if (props()?.part === "measure") return div().id("bar-measure").size_full()

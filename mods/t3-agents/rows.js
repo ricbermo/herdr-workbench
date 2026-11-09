@@ -11,9 +11,9 @@ import { programIcon, detailsFor, detailsAt, detailsLine, detailsCard } from "./
 import { stop, within } from "./focus.js";
 import { MOTION, foldArrow } from "./motion.js";
 
-// T3's one-line row and shelf or folder header, its folders 8 apart and its list's 1px between items (gap-px).
+// T3's one-line row and shelf or folder header; folders are 8px apart, rows 4px.
 const ROW = 64, SUBROW = 36, HEAD = 32, HEAD_GAP = 8;
-export const STACK = 1;
+export const STACK = 4;
 export const RANK = { blocked: 4, done: 3, working: 2, idle: 1 };
 export const SECTION = { 4: "Needs you", 3: "Done", 2: "Working", 1: "Idle" };
 
@@ -98,7 +98,7 @@ function agentSubRow(view, t, s, shown, card, ghost) {
 export function agentStatus(view, t, a, note = "", id) {
   const color = t[a.status] ?? t.dim;
   let mark;
-  if (a.status === "working") mark = svg("mods/workspace-chrome/spinner.svg").size(12).flex_none().text_color(t.working).spin(900);
+  if (a.status === "working") mark = svg("mods/t3-agents/icons/spinner.svg").size(12).flex_none().text_color(t.working).spin(900);
   else if (a.status === "blocked") mark = div().size(12).flex_none().rounded(3).bg(t.blocked + "26").text_size(10).font_bold().text_color(t.blocked).flex().items_center().justify_center().child("!");
   // Idle: a ring; done: a dot. Every mark is 12 wide, as T3's one-line row, flush right, so the column ends where Spaces' git info does.
   else if (a.status === "idle") mark = div().size(6).mx(3).flex_none().rounded_full().border(1.5).border_color(t.idle ?? t.dim);

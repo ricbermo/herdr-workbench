@@ -3,7 +3,7 @@
 
 import { View, div, svg } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
-import { agents, terminals, panes, spaces, focused, theme, layout, shared, setShared, setAgentOrder, settings, openOverlay, closeOverlay, props, nextCommand } from "herdr";
+import { agents, terminals, panes, spaces, focused, theme, layout, shared, setShared, setAgentOrder, settings, openOverlay, closeOverlay, props, nextCommand, exec } from "herdr";
 import { notNews, ownStatus, subAgents, treeStatus } from "./tree.js";
 import { glow, tip } from "./tip.js";
 import { stopsInit, stopsEnd, stop, focusRoot, enter } from "./focus.js";
@@ -17,6 +17,12 @@ const SORTS = [
 const sortOf = () => SORTS.find((s) => s.id === shared("agents.sort")) ?? SORTS[0];
 
 const SORT_WIDTH = 200;
+const notifyUser = (message) => {
+  const text = String(message).replace(/[\r\n]+/g, " ").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  exec("osascript", ["-e", `display notification "${text}" with title "Herdr"`])
+    .then(({ code, stderr }) => { if (code !== 0) console.log(stderr || `osascript exited ${code}`); })
+    .catch((error) => console.log(String(error)));
+};
 
 export default class Agents extends View {
   async close() { stopsEnd(this); }
@@ -67,7 +73,9 @@ export default class Agents extends View {
     const changedAt = new Map(spaces().flatMap((s) => s.tabs ?? []).map((c) => [c.id, c.changed_at]));
     for (const a of list) {
       const s = a.status === "done" ? "idle" : a.status;
-      if (this.changed[a.address]?.s === s) continue;
+      const previous = this.changed[a.address]?.s;
+      if (s === "blocked" && previous !== "blocked") notifyUser(`${a.name || a.program?.name || "Un agente"} necesita tu atención.`);
+      if (previous === s) continue;
       this.changed[a.address] = { s, at: changedAt.get(a.tab) ?? now };
       dirty = true;
     }

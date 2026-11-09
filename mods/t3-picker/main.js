@@ -69,7 +69,7 @@ export default class Picker extends View {
   row(item, i, ps) {
     const t = theme(), on = this.at === i, s = item.s, st = item.status;
     // The same marks as the pane headers, tabs and agents list.
-    const mark = st === "working" ? svg("mods/workspace-chrome/spinner.svg").size(12).flex_none().text_color(t.working).spin(900)
+    const mark = st === "working" ? svg("mods/t3-picker/icons/spinner.svg").size(12).flex_none().text_color(t.working).spin(900)
       : st === "blocked" ? div().size(14).flex_none().rounded(4).bg(t.blocked + "26").text_size(11).font_bold().text_color(t.blocked).flex().items_center().justify_center().child("!")
       : st === "done" && !notNews(terminals().find(k => k.address === item.p.terminal), item.p.status, item.under) ? div().size(6).flex_none().rounded_full().bg(t.done) : null;
     return h_flex().id(item.key).w_full().h(ROW).px(8).py(6).gap(8).rounded(4).items_center().flex_none()

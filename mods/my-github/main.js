@@ -317,11 +317,11 @@ export default class GitHub extends View {
       }));
       content = v_flex().flex_1().min_h(0).child(tabs);
       if (this.projectLoading) content = content.child(h_flex().px(12).py(8).gap(7).items_center().text_color(t.dim)
-        .child(svg("mods/workspace-chrome/spinner.svg").size(12).spin(900)).child("Finding this project's GitHub repository…"));
+        .child(svg("mods/my-github/icons/spinner.svg").size(12).spin(900)).child("Finding this project's GitHub repository…"));
       else if (this.projectError) content = content.child(div().px(12).py(8).text_color(t.dim).child(this.projectError));
       else if (this.errors[this.kind]) content = content.child(div().px(12).py(8).text_color(t.blocked).child(this.errors[this.kind]));
       else if (this.busy[this.kind]) content = content.child(h_flex().px(12).py(8).gap(7).items_center().text_color(t.dim)
-        .child(svg("mods/workspace-chrome/spinner.svg").size(12).spin(900))
+        .child(svg("mods/my-github/icons/spinner.svg").size(12).spin(900))
         .child(`${items.length ? "Updating" : "Loading"} ${this.kind === "prs" ? "pull requests" : "issues"} for ${this.repo ?? "project"}…`));
       else if (!items.length && this.repo) content = content.child(div().px(12).py(8).text_color(t.dim).child(`No open ${this.kind === "prs" ? "pull requests" : "issues"} in ${this.repo}.`));
       content = content.child(rows);

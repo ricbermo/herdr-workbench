@@ -13,8 +13,9 @@ function find(node, id) {
   return null;
 }
 
-// The sidebar shows either Lists (Spaces and Agents) or the Inbox (t3-inbox): a stack in the layout.
-const inboxShown = () => find(layout(), "sidebar-lists")?.active === "inbox";
+const sidebar = () => find(layout(), "sidebar-lists");
+const hasInbox = () => sidebar()?.children?.some((child) => child.id === "inbox") ?? false;
+const inboxShown = () => sidebar()?.active === "inbox";
 export default class WorkspaceChrome extends View {
   async close() { stopsEnd(this); }
 
@@ -79,13 +80,13 @@ export default class WorkspaceChrome extends View {
         .child(div().min_w(0).truncate().child("Herdr")), 8))
       .child(div().flex_1())
       // T3's 28px title bar buttons, side by side instead of its 12 apart, so each stands over a button of the list's top row below.
-      .child(tip(this, t, "sidebar-mode", inbox ? "Show lists" : "Show inbox", stop(this, t, "sidebar-mode", div().id("sidebar-mode").size(28).flex_none().flex().items_center().justify_center().rounded(8)
+      .when(hasInbox(), el => el.child(tip(this, t, "sidebar-mode", inbox ? "Show lists" : "Show inbox", stop(this, t, "sidebar-mode", div().id("sidebar-mode").size(28).flex_none().flex().items_center().justify_center().rounded(8)
         .text_color(lit("sidebar-mode")).hover(s => s.bg(t.hover)).on_hover(glow(this, "sidebar-mode"))
         .role("button").accessibility_label(inbox ? "Show lists" : "Show inbox")
         .on_mouse_down("left", (_e, cx) => cx.stop_propagation())
         .on_click(() => run("t3-tabs.sidebar"))
         // The mode a click shows, as its label says: a tray for the Inbox, rows with their marks for the lists. Not circle-check or layers: those are Settle and Grouped by space.
-        .child(svg(`mods/t3-chrome/icons/${inbox ? "layout-list" : "inbox"}.svg`).size(14)), 8), { action: "t3-tabs.sidebar", below: true }))
+        .child(svg(`mods/t3-chrome/icons/${inbox ? "layout-list" : "inbox"}.svg`).size(14)), 8), { action: "t3-tabs.sidebar", below: true })))
       .child(tip(this, t, "sidebar-toggle", "Hide sidebar", stop(this, t, "sidebar-toggle", div().id("sidebar-toggle").size(28).flex_none().flex().items_center().justify_center().rounded(8)
         .text_color(lit("sidebar-toggle")).hover(s => s.bg(t.hover)).on_hover(glow(this, "sidebar-toggle"))
         .role("button").accessibility_label("Hide sidebar")
