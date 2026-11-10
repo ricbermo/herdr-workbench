@@ -1,6 +1,6 @@
 import { View, div, svg } from "gpui-kit";
 import { h_flex, v_flex, TextView } from "gpui-base";
-import { closeOverlay, exec, openOverlay, panes, props, readTextFile, spaces, theme } from "herdr";
+import { closeOverlay, exec, nextCommand, openOverlay, panes, props, readTextFile, spaces, theme } from "herdr";
 
 function activePlace() {
   const space = spaces().find((item) => item.active);
@@ -34,6 +34,7 @@ export const TODAY_MARKDOWN_SEARCH = 'set -eu; marker=$(mktemp "${TMPDIR:-/tmp}/
 
 export default class Markdown extends View {
   init(_props, cx) {
+    if (!props()?.viewer) cx.spawn(async () => { for (;;) if (await nextCommand() === "open") this.openViewer(); });
     this.files = [];
     this.selected = null;
     this.content = null;
@@ -63,6 +64,11 @@ export default class Markdown extends View {
     }
   }
 
+  openViewer() {
+    const place = activePlace();
+    openOverlay({ mod: "my-markdown", kind: "dialog", frame: "none", width: 950, height: 800, props: { viewer: true, folder: place?.folder ?? null, machine: place?.machine ?? null } });
+  }
+
   async openFile(path, cx) {
     this.selected = path;
     this.content = null;
@@ -85,10 +91,7 @@ export default class Markdown extends View {
       .child(h_flex().h(24).px(7).gap(5).items_center().rounded(8).border(1).border_color(t.border)
         .text_size(12).cursor_pointer().text_color(t.dim).hover((el) => el.bg(t.hover).text_color(t.foreground))
         .role("button").accessibility_label("Browse Markdown files")
-        .on_click(() => {
-          const place = activePlace();
-          openOverlay({ mod: "my-markdown", kind: "dialog", frame: "none", width: 950, height: 800, props: { viewer: true, folder: place?.folder ?? null, machine: place?.machine ?? null } });
-        })
+        .on_click(() => this.openViewer())
         .child(svg("mods/my-markdown/icons/file-text.svg").size(14)).child("Markdown"));
 
     const close = () => closeOverlay(p.overlay);

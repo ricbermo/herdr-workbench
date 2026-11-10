@@ -113,6 +113,13 @@
               "window_drag": true
             },
             {
+              "id": "tools-toggle",
+              "type": "block",
+              "content": { "mod": "my-tools" },
+              "size": { "px": 200 },
+              "window_drag": true
+            },
+            {
               "id": "tabs-end",
               "type": "block",
               "content": {

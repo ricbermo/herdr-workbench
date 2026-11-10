@@ -8,7 +8,7 @@ The bundled T3 mods also carry source metadata in their `mod.json` files. In par
 
 The `themes/dracula.json` palette follows the official [Dracula Classic specification](https://draculatheme.com/spec). The app-specific role mapping is this repository's implementation; the official Dracula theme project is MIT-licensed (see [dracula/dracula-theme](https://github.com/dracula/dracula-theme)).
 
-The bundled SVG icons include Lucide artwork, Copyright Lucide Contributors, licensed under the ISC License:
+The Neovim icon in `mods/my-tools/icons/nvim.svg` is from [Simple Icons](https://github.com/simple-icons/simple-icons), released under CC0 1.0. The other bundled SVG icons include Lucide artwork, Copyright Lucide Contributors, licensed under the ISC License:
 
 > ISC License
 >
