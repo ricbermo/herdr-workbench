@@ -2,7 +2,7 @@
 
 A Dracula Classic terminal-first Herdr layout with profile-aware spaces, agent activity, Markdown browsing, modal Neovim/Lazygit launchers, a Changes panel, and an optional GitHub issues/PR panel.
 
-![Herdr Workbench](preview.png)
+![Herdr Workbench](layouts/preview.png)
 
 See [`RECIPE.md`](RECIPE.md) for the full layout specification, required mods, behavior, limitations, and verification steps. The package is under `layouts/`, `mods/`, and `themes/`; install `themes/dracula.json` as `~/.config/herdr-app/themes/dracula.json` so the layout can load its palette.
 
