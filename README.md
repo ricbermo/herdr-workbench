@@ -29,6 +29,8 @@ Add these layout-scoped bindings to `~/.config/herdr-app/keys.json` (the prefix 
 ```json
 {
   "layout:herdr-workbench": {
+    "cmd-p": "mod.open:picker",
+    "cmd-shift-p": "app.palette",
     "alt-a e": "my-tools.nvim",
     "alt-a y": "my-tools.lazygit",
     "alt-a m": "my-markdown.open",
