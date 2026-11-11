@@ -34,8 +34,8 @@ Add these layout-scoped bindings to `~/.config/herdr-app/keys.json` (the prefix 
     "alt-a e": "my-tools.nvim",
     "alt-a y": "my-tools.lazygit",
     "alt-a m": "my-markdown.open",
-    "alt-a c": "my-changes-toggle.toggle",
-    "alt-a g": "my-github-toggle.toggle",
+    "alt-a g": "my-changes-toggle.toggle",
+    "alt-a i": "my-github-toggle.toggle",
     "alt-a shift-c": "tab.new"
   }
 }
